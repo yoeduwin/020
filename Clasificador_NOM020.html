@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clasificador NOM-020-STPS-2011 | Ejecutiva Ambiental</title>
+<style>
+:root{
+  --verde-1:#005600;
+  --verde-2:#007836;
+  --grafito:#1C1C1C;
+  --gris-tec:#6B6B6B;
+  --gris-bg:#F4F4F2;
+  --footer-txt:#888888;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  background:#FFFFFF;
+  color:var(--grafito);
+  padding:20px;
+  line-height:1.5;
+}
+.container{max-width:720px;margin:0 auto;}
+.header{
+  background:var(--verde-1);
+  color:#fff;
+  padding:22px 24px;
+  border-radius:6px 6px 0 0;
+}
+.header h1{font-size:19px;font-weight:600;}
+.header p{font-size:12px;opacity:.85;margin-top:4px;}
+.accordion-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:600;
+  color:var(--verde-1);
+  user-select:none;
+}
+.accordion-icon{
+  font-size:18px;
+  font-weight:700;
+  color:var(--verde-1);
+  width:26px;
+  height:26px;
+  min-width:26px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid var(--verde-1);
+  border-radius:4px;
+  flex-shrink:0;
+}
+.accordion-content{
+  margin-top:14px;
+  padding-top:14px;
+  border-top:1px solid #e8e8e6;
+}
+.substep{
+  margin-top:16px;
+  padding-top:16px;
+  border-top:1px solid #e8e8e6;
+}
+.reset-link{
+  display:inline-block;
+  margin-top:16px;
+  font-size:11px;
+  color:var(--gris-tec);
+  cursor:pointer;
+  text-decoration:underline;
+  background:none;
+  border:none;
+  padding:0;
+}
+.nom-tag{
+  display:inline-block;
+  background:var(--gris-bg);
+  color:var(--verde-2);
+  font-size:10px;
+  padding:2px 7px;
+  border-radius:3px;
+  font-family:'Courier New',monospace;
+  margin-left:6px;
+  vertical-align:middle;
+}
+.card{
+  background:#fff;
+  border:1px solid #e8e8e6;
+  border-left:0.06in solid var(--verde-1);
+  border-radius:4px;
+  padding:18px 20px;
+  margin-top:14px;
+}
+.step-label{
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  color:var(--gris-tec);
+  margin-bottom:10px;
+  font-weight:600;
+}
+label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;}
+input[type=text],input[type=number],select{
+  width:100%;
+  padding:9px 10px;
+  border:1px solid #ddd;
+  border-radius:4px;
+  font-size:13px;
+  background:#fff;
+  color:var(--grafito);
+}
+input:focus,select:focus{outline:none;border-color:var(--verde-2);}
+.input-row{display:grid;grid-template-columns:2fr 1fr;gap:8px;}
+.help{font-size:11px;color:var(--gris-tec);margin-top:4px;}
+.tipo-grid{display:grid;grid-template-columns:1fr;gap:8px;}
+.tipo-btn{
+  border:1px solid #ddd;
+  background:var(--gris-bg);
+  border-radius:4px;
+  padding:13px 14px;
+  text-align:left;
+  cursor:pointer;
+  font-size:13px;
+  font-weight:600;
+  color:var(--grafito);
+  transition:all .15s;
+}
+.tipo-btn small{display:block;font-size:11px;font-weight:400;color:var(--gris-tec);margin-top:2px;}
+.tipo-btn:hover{border-color:var(--verde-2);}
+.tipo-btn.selected{background:var(--verde-1);color:#fff;border-color:var(--verde-1);}
+.tipo-btn.selected small{color:rgba(255,255,255,0.8);}
+.radio-group{display:flex;gap:8px;}
+.radio-card{
+  flex:1;
+  border:1px solid #ddd;
+  border-radius:4px;
+  padding:10px 12px;
+  cursor:pointer;
+  font-size:12px;
+  font-weight:600;
+  transition:all .15s;
+}
+.radio-card .help{margin-top:3px;font-weight:400;}
+.radio-card:hover{border-color:var(--verde-2);}
+.radio-card.selected{border-color:var(--verde-2);background:var(--gris-bg);}
+.category-badge{
+  display:inline-block;
+  font-size:26px;
+  font-weight:700;
+  padding:8px 22px;
+  border-radius:4px;
+  letter-spacing:.03em;
+}
+.badge-I{background:var(--gris-bg);color:var(--grafito);}
+.badge-II{background:var(--verde-2);color:#fff;}
+.badge-III{background:var(--verde-1);color:#fff;}
+.result-detail{font-size:13px;margin-top:12px;}
+.result-detail strong{color:var(--verde-1);}
+.implicacion{
+  background:var(--gris-bg);
+  padding:12px 14px;
+  border-radius:4px;
+  margin-top:12px;
+  font-size:12px;
+  line-height:1.6;
+}
+.check-ok{border:1px solid var(--verde-2);}
+.check-bad{border:2px solid var(--grafito);font-weight:600;}
+.btn{
+  background:var(--verde-1);
+  color:#fff;
+  border:none;
+  border-radius:4px;
+  padding:10px 18px;
+  font-size:13px;
+  font-weight:600;
+  cursor:pointer;
+  margin-top:14px;
+}
+.btn:hover{background:var(--verde-2);}
+.footer{
+  background:var(--gris-bg);
+  color:var(--footer-txt);
+  font-size:11px;
+  text-align:center;
+  padding:14px;
+  border-radius:0 0 6px 6px;
+  margin-top:14px;
+}
+.result{display:none;}
+.result.show{display:block;}
+@media(min-width:560px){
+  .tipo-grid{grid-template-columns:1fr 1fr 1fr;}
+}
+@media(max-width:480px){
+  .input-row{grid-template-columns:1fr;}
+  .radio-group{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>Clasificador NOM-020-STPS-2011</h1>
+    <p>Recipientes sujetos a presión, criogénicos y generadores de vapor / calderas</p>
+  </div>
+
+  <!-- ¿Categoría del recipiente? -->
+  <div class="card">
+    <div class="accordion-header" onclick="toggleSection('sec-clasificador')">
+      <span>¿Necesitas saber la categoría del recipiente?</span>
+      <span class="accordion-icon" id="sec-clasificador-icon">+</span>
+    </div>
+    <div class="accordion-content" id="sec-clasificador" style="display:none;">
+
+      <div class="step-label">Identificación (opcional)</div>
+      <input type="text" id="tag" placeholder="TAG / N° de serie / nombre del equipo">
+
+      <div class="substep">
+        <div class="step-label">Paso 1 — Tipo de equipo <span class="nom-tag">Numeral 7.1</span></div>
+        <div class="tipo-grid">
+          <div class="tipo-btn" data-tipo="recipiente" onclick="selectTipo('recipiente')">
+            Recipiente sujeto a presión<small>Tabla 1</small>
+          </div>
+          <div class="tipo-btn" data-tipo="criogenico" onclick="selectTipo('criogenico')">
+            Recipiente criogénico<small>Tabla 2</small>
+          </div>
+          <div class="tipo-btn" data-tipo="generador" onclick="selectTipo('generador')">
+            Generador / caldera<small>Tabla 3</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="substep" id="step2" style="display:none;"></div>
+      <div class="substep" id="step3" style="display:none;"></div>
+      <div class="substep result" id="resultCard"></div>
+
+      <button class="reset-link" onclick="reiniciar()">↺ Reiniciar clasificación</button>
+    </div>
+  </div>
+
+  <!-- ¿Calibración de válvula? -->
+  <div class="card">
+    <div class="accordion-header" onclick="toggleSection('sec-valvula')">
+      <span>¿Necesitas saber a cuánto calibrar la válvula?</span>
+      <span class="accordion-icon" id="sec-valvula-icon">+</span>
+    </div>
+    <div class="accordion-content" id="sec-valvula" style="display:none;">
+      <div class="step-label">Calibración de válvula de relevo <span class="nom-tag">Numeral 12.2 / ASME UG-134</span></div>
+      <label>Presión de operación</label>
+      <div class="input-row">
+        <input type="number" step="0.01" id="pOpValvula" placeholder="Ej. 6" oninput="calcValvula()">
+        <select id="unidadPOpValvula" onchange="calcValvula()">
+          <option value="kgcm2">kg/cm²</option>
+          <option value="bar">bar</option>
+          <option value="kpa">kPa</option>
+          <option value="psi">psi</option>
+        </select>
+      </div>
+      <label style="margin-top:12px;">Presión de diseño / máxima de trabajo (MAWP, placa de datos)</label>
+      <div class="input-row">
+        <input type="number" step="0.01" id="pDiseno" placeholder="Ej. 10" oninput="calcValvula()">
+        <select id="unidadPDiseno" onchange="calcValvula()">
+          <option value="kgcm2">kg/cm²</option>
+          <option value="bar">bar</option>
+          <option value="kpa">kPa</option>
+          <option value="psi">psi</option>
+        </select>
+      </div>
+      <div class="help">Presión de calibración recomendada = Presión de operación × 1.15 (margen del 15%)</div>
+      <div id="resultValvula"></div>
+    </div>
+  </div>
+
+  <!-- ¿Verificar manómetro? -->
+  <div class="card">
+    <div class="accordion-header" onclick="toggleSection('sec-manometro')">
+      <span>¿Necesitas verificar el rango del manómetro?</span>
+      <span class="accordion-icon" id="sec-manometro-icon">+</span>
+    </div>
+    <div class="accordion-content" id="sec-manometro" style="display:none;">
+      <div class="step-label">Verificación de manómetro <span class="nom-tag">Numeral 12.2.1</span></div>
+      <label>Presión de operación</label>
+      <div class="input-row">
+        <input type="number" step="0.01" id="pOpManometro" placeholder="Ej. 6" oninput="calcManometro()">
+        <select id="unidadPOpManometro" onchange="calcManometro()">
+          <option value="kgcm2">kg/cm²</option>
+          <option value="bar">bar</option>
+          <option value="kpa">kPa</option>
+          <option value="psi">psi</option>
+        </select>
+      </div>
+      <label style="margin-top:12px;">Rango (escala completa) del manómetro</label>
+      <div class="input-row">
+        <input type="number" step="0.01" id="rangoManometro" placeholder="Ej. 16" oninput="calcManometro()">
+        <select id="unidadRangoManometro" onchange="calcManometro()">
+          <option value="kgcm2">kg/cm²</option>
+          <option value="bar">bar</option>
+          <option value="kpa">kPa</option>
+          <option value="psi">psi</option>
+        </select>
+      </div>
+      <div class="help">El rango debe ser de 1.5 a 4 veces la presión de operación (o que esta caiga en el segundo tercio de la carátula)</div>
+      <div id="gaugeContainer" style="margin-top:10px;text-align:center;"></div>
+      <div id="resultManometro"></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Herramienta interna · Ejecutiva Ambiental · Basada en NOM-020-STPS-2011, Tablas 1, 2 y 3.<br>
+    No sustituye el dictamen de una Unidad de Verificación.
+  </div>
+</div>
+
+<script>
+const CONV_P = { kgcm2:1, bar:1.01972, kpa:0.0101972, psi:0.070307 }; // -> kg/cm2
+const CONV_V_M3 = { m3:1, litros:0.001 }; // -> m3
+const CONV_C_KCAL = { kcal:1, mj:238.846 }; // -> kcal/hr
+
+const TIPO_TEXTO = {
+  recipiente:'Recipiente sujeto a presión',
+  criogenico:'Recipiente criogénico',
+  generador:'Generador de vapor / caldera'
+};
+
+const IMPLICACIONES = {
+  'I':'Clasificación, listado de equipos y expediente técnico básico. Inspección visual por personal capacitado.',
+  'II':'Expediente técnico completo, programa de mantenimiento y calibración, e inspección con dictamen vigente (Capítulo 15).',
+  'III':'Todo lo de Categoría II, más AVISO A LA STPS antes de iniciar operación (Numeral 5.13, Capítulo 16) e inspección obligatoria por Unidad de Verificación. Renovación del aviso cada 10 años (1a vez) y luego cada 5.'
+};
+
+let state = { tipo:null, fluido:null };
+let lastResult = null;
+
+function toggleSection(id){
+  const content = document.getElementById(id);
+  const icon = document.getElementById(id+'-icon');
+  const isOpen = content.style.display === 'block';
+  content.style.display = isOpen ? 'none' : 'block';
+  icon.textContent = isOpen ? '+' : '−';
+}
+
+function selectTipo(tipo){
+  state.tipo = tipo;
+  state.fluido = null;
+  document.querySelectorAll('.tipo-btn').forEach(b=>b.classList.toggle('selected', b.dataset.tipo===tipo));
+  renderStep2();
+  hideStep3();
+  hideResult();
+}
+
+function renderStep2(){
+  const step2 = document.getElementById('step2');
+  step2.style.display = 'block';
+
+  if(state.tipo==='recipiente'){
+    step2.innerHTML = `
+      <div class="step-label">Paso 2 — Presión y tipo de fluido <span class="nom-tag">Tabla 1</span></div>
+      <label>Presión de calibración del dispositivo de relevo</label>
+      <div class="input-row">
+        <input type="number" step="0.01" id="presion" placeholder="Ej. 6.5" oninput="evaluar()">
+        <select id="unidadPresion" onchange="evaluar()">
+          <option value="kgcm2">kg/cm²</option>
+          <option value="bar">bar</option>
+          <option value="kpa">kPa</option>
+          <option value="psi">psi</option>
+        </select>
+      </div>
+      <label style="margin-top:14px;">Fluido</label>
+      <div class="radio-group">
+        <div class="radio-card" id="rad-no" onclick="setFluido('no')">
+          No peligroso<div class="help">Agua, aire, vapor, N₂ inerte</div>
+        </div>
+        <div class="radio-card" id="rad-si" onclick="setFluido('si')">
+          Peligroso<div class="help">Inflamable, tóxico, corrosivo, criogénico peligroso</div>
+        </div>
+      </div>
+      <div class="help" style="margin-top:8px;">Si no está seguro, consulte la SDS del fluido (NOM-018-STPS).</div>
+    `;
+  } else if(state.tipo==='criogenico'){
+    step2.innerHTML = `
+      <div class="step-label">Paso 2 — Volumen <span class="nom-tag">Tabla 2</span></div>
+      <label>Volumen total del recipiente</label>
+      <div class="input-row">
+        <input type="number" step="0.01" id="volumen" placeholder="Ej. 1.5" oninput="evaluar()">
+        <select id="unidadVolumen" onchange="evaluar()">
+          <option value="m3">m³</option>
+          <option value="litros">Litros</option>
+        </select>
+      </div>
+    `;
+  } else if(state.tipo==='generador'){
+    step2.innerHTML = `
+      <div class="step-label">Paso 2 — Presión <span class="nom-tag">Tabla 3</span></div>
+      <label>Presión de calibración (primera válvula de seguridad)</label>
+      <div class="input-row">
+        <input type="number" step="0.01" id="presion" placeholder="Ej. 4" oninput="evaluar()">
+        <select id="unidadPresion" onchange="evaluar()">
+          <option value="kgcm2">kg/cm²</option>
+          <option value="bar">bar</option>
+          <option value="kpa">kPa</option>
+          <option value="psi">psi</option>
+        </select>
+      </div>
+    `;
+  }
+}
+
+function setFluido(f){
+  state.fluido = f;
+  document.getElementById('rad-no').classList.toggle('selected', f==='no');
+  document.getElementById('rad-si').classList.toggle('selected', f==='si');
+  evaluar();
+}
+
+function showStep3Volumen(){
+  const step3 = document.getElementById('step3');
+  step3.style.display = 'block';
+  if(step3.dataset.kind !== 'volumen'){
+    step3.dataset.kind = 'volumen';
+    step3.innerHTML = `
+      <div class="step-label">Paso 3 — Volumen <span class="nom-tag">Numeral 9.1.c.5</span></div>
+      <label>Volumen total del recipiente</label>
+      <div class="input-row">
+        <input type="number" step="0.01" id="volumen" placeholder="Ej. 0.8" oninput="evaluar()">
+        <select id="unidadVolumen" onchange="evaluar()">
+          <option value="m3">m³</option>
+          <option value="litros">Litros</option>
+        </select>
+      </div>
+    `;
+  }
+}
+
+function showStep3Capacidad(){
+  const step3 = document.getElementById('step3');
+  step3.style.display = 'block';
+  if(step3.dataset.kind !== 'capacidad'){
+    step3.dataset.kind = 'capacidad';
+    step3.innerHTML = `
+      <div class="step-label">Paso 3 — Capacidad térmica <span class="nom-tag">Tabla 3</span></div>
+      <label>Capacidad térmica de la caldera</label>
+      <div class="input-row">
+        <input type="number" step="1" id="capacidad" placeholder="Ej. 350000" oninput="evaluar()">
+        <select id="unidadCapacidad" onchange="evaluar()">
+          <option value="kcal">Kcal/hr</option>
+          <option value="mj">MJ/hr</option>
+        </select>
+      </div>
+    `;
+  }
+}
+
+function hideStep3(){
+  const step3 = document.getElementById('step3');
+  step3.style.display = 'none';
+  step3.dataset.kind = '';
+  step3.innerHTML = '';
+}
+
+function readPresion(){
+  const el = document.getElementById('presion');
+  if(!el || el.value==='') return null;
+  const u = document.getElementById('unidadPresion').value;
+  return parseFloat(el.value) * CONV_P[u];
+}
+function readVolumen(){
+  const el = document.getElementById('volumen');
+  if(!el || el.value==='') return null;
+  const u = document.getElementById('unidadVolumen').value;
+  return parseFloat(el.value) * CONV_V_M3[u];
+}
+function readCapacidad(){
+  const el = document.getElementById('capacidad');
+  if(!el || el.value==='') return null;
+  const u = document.getElementById('unidadCapacidad').value;
+  return parseFloat(el.value) * CONV_C_KCAL[u];
+}
+
+function evaluar(){
+  if(!state.tipo) return;
+
+  if(state.tipo==='recipiente'){
+    const P = readPresion();
+    if(P===null || !state.fluido){ hideStep3(); hideResult(); return; }
+
+    if(state.fluido==='no' && P>8){
+      hideStep3();
+      showResult('III','Tabla 1 (Numeral 7.1.1)','Fluido no peligroso y P > 8 kg/cm² (cualquier volumen)', {P});
+      return;
+    }
+    if(state.fluido==='si' && P>7){
+      hideStep3();
+      showResult('III','Tabla 1 (Numeral 7.1.1)','Fluido peligroso y P > 7 kg/cm² (cualquier volumen)', {P});
+      return;
+    }
+
+    showStep3Volumen();
+    const V = readVolumen();
+    if(V===null){ hideResult(); return; }
+
+    let cat, criterio;
+    if(state.fluido==='no'){
+      if(P<=5 && V<=0.5){ cat='I'; criterio='Fluido no peligroso, P ≤ 5 kg/cm² y V ≤ 0.5 m³'; }
+      else if(P<=5){ cat='II'; criterio='Fluido no peligroso, P ≤ 5 kg/cm² y V > 0.5 m³'; }
+      else if(V<=1){ cat='II'; criterio='Fluido no peligroso, 5 < P ≤ 8 kg/cm² y V ≤ 1 m³'; }
+      else { cat='III'; criterio='Fluido no peligroso, 5 < P ≤ 8 kg/cm² y V > 1 m³'; }
+    } else {
+      if(V<=1){ cat='II'; criterio='Fluido peligroso, P ≤ 7 kg/cm² y V ≤ 1 m³'; }
+      else { cat='III'; criterio='Fluido peligroso, P ≤ 7 kg/cm² y V > 1 m³'; }
+    }
+    showResult(cat,'Tabla 1 (Numeral 7.1.1)',criterio,{P,V});
+  }
+
+  else if(state.tipo==='criogenico'){
+    hideStep3();
+    const V = readVolumen();
+    if(V===null){ hideResult(); return; }
+    if(V<=1) showResult('II','Tabla 2 (Numeral 7.1.2)','V ≤ 1 m³', {V});
+    else showResult('III','Tabla 2 (Numeral 7.1.2)','V > 1 m³', {V});
+  }
+
+  else if(state.tipo==='generador'){
+    const P = readPresion();
+    if(P===null){ hideStep3(); hideResult(); return; }
+    if(P>5){
+      hideStep3();
+      showResult('III','Tabla 3 (Numeral 7.1.3)','P > 5 kg/cm² (cualquier capacidad térmica)', {P});
+      return;
+    }
+    showStep3Capacidad();
+    const Cap = readCapacidad();
+    if(Cap===null){ hideResult(); return; }
+    if(Cap<=400000) showResult('II','Tabla 3 (Numeral 7.1.3)','P ≤ 5 kg/cm² y Cap ≤ 400,000 Kcal/hr', {P,Cap});
+    else showResult('III','Tabla 3 (Numeral 7.1.3)','P ≤ 5 kg/cm² y Cap > 400,000 Kcal/hr', {P,Cap});
+  }
+}
+
+function showResult(cat, fundamento, criterio, params){
+  const paramLines = [];
+  if(params.P!==undefined) paramLines.push(`Presión: ${params.P.toFixed(2)} kg/cm²`);
+  if(params.V!==undefined) paramLines.push(`Volumen: ${params.V.toFixed(3)} m³`);
+  if(params.Cap!==undefined) paramLines.push(`Capacidad: ${params.Cap.toFixed(0)} Kcal/hr`);
+  if(state.fluido) paramLines.push(`Fluido: ${state.fluido==='si' ? 'Peligroso' : 'No peligroso'}`);
+
+  const tag = document.getElementById('tag').value;
+  const tipoTexto = TIPO_TEXTO[state.tipo];
+
+  lastResult = { cat, fundamento, criterio, paramLines, tipoTexto, tag };
+
+  const resultCard = document.getElementById('resultCard');
+  resultCard.innerHTML = `
+    <div class="step-label">Resultado</div>
+    <div class="category-badge badge-${cat}">CATEGORÍA ${cat}</div>
+    <div class="result-detail">
+      <strong>Equipo:</strong> ${tipoTexto}${tag ? ' — '+tag : ''}<br>
+      <strong>Fundamento:</strong> ${fundamento}<br>
+      <strong>Criterio:</strong> ${criterio}<br>
+      <strong>Parámetros:</strong> ${paramLines.join(' · ')}
+    </div>
+    <div class="implicacion">${IMPLICACIONES[cat]}</div>
+    <button class="btn" onclick="copiarResumen()">Copiar resumen</button>
+  `;
+  resultCard.classList.add('show');
+}
+
+function hideResult(){
+  document.getElementById('resultCard').classList.remove('show');
+  document.getElementById('resultCard').innerHTML = '';
+  lastResult = null;
+}
+
+function copiarResumen(){
+  if(!lastResult) return;
+  const r = lastResult;
+  const texto =
+`TAG: ${r.tag || '(sin especificar)'}
+Equipo: ${r.tipoTexto}
+${r.paramLines.join('\n')}
+→ CATEGORÍA ${r.cat} — ${r.fundamento}
+Criterio: ${r.criterio}
+
+${IMPLICACIONES[r.cat]}`;
+
+  navigator.clipboard.writeText(texto).then(()=>{
+    alert('Resumen copiado al portapapeles');
+  });
+}
+
+function reiniciar(){
+  state = { tipo:null, fluido:null };
+  document.querySelectorAll('.tipo-btn').forEach(b=>b.classList.remove('selected'));
+  document.getElementById('tag').value = '';
+  document.getElementById('step2').style.display = 'none';
+  document.getElementById('step2').innerHTML = '';
+  hideStep3();
+  hideResult();
+}
+
+// ---- Calibración de válvula de relevo ----
+function calcValvula(){
+  const pOpEl = document.getElementById('pOpValvula');
+  const pDisEl = document.getElementById('pDiseno');
+  const out = document.getElementById('resultValvula');
+
+  if(!pOpEl.value){ out.innerHTML=''; return; }
+
+  const uOp = document.getElementById('unidadPOpValvula').value;
+  const pOp = parseFloat(pOpEl.value) * CONV_P[uOp];
+  const pCal = pOp * 1.15;
+
+  let html = `<div class="implicacion">
+    <strong>Presión de operación:</strong> ${pOp.toFixed(2)} kg/cm²<br>
+    <strong>Presión de calibración recomendada (× 1.15):</strong> ${pCal.toFixed(2)} kg/cm²
+  </div>`;
+
+  if(pDisEl.value){
+    const uDis = document.getElementById('unidadPDiseno').value;
+    const pDis = parseFloat(pDisEl.value) * CONV_P[uDis];
+
+    if(pCal <= pDis){
+      html += `<div class="implicacion check-ok">✅ <strong>Correcto.</strong> La presión de calibración recomendada (${pCal.toFixed(2)} kg/cm²) no excede la presión de diseño/MAWP (${pDis.toFixed(2)} kg/cm²). Cumple con NOM-020-STPS-2011 (el punto de ajuste de los dispositivos de relevo no debe ser mayor a la presión máxima de trabajo) y ASME Sección VIII, UG-134 (set pressure ≤ MAWP).</div>`;
+    } else {
+      html += `<div class="implicacion check-bad">❌ <strong>No correcto.</strong> 1.15 × presión de operación (${pCal.toFixed(2)} kg/cm²) excede la presión de diseño/MAWP (${pDis.toFixed(2)} kg/cm²). No cumple con NOM-020-STPS-2011 ni ASME Sección VIII, UG-134. La válvula debe calibrarse a un valor ≤ MAWP — revise la presión de operación o el diseño del equipo.</div>`;
+    }
+  } else {
+    html += `<div class="help">Ingrese la presión de diseño (MAWP) para validar contra NOM-020 / ASME UG-134.</div>`;
+  }
+
+  out.innerHTML = html;
+}
+
+// ---- Verificación de manómetro ----
+function calcManometro(){
+  const pOpEl = document.getElementById('pOpManometro');
+  const rangoEl = document.getElementById('rangoManometro');
+  const gaugeContainer = document.getElementById('gaugeContainer');
+  const out = document.getElementById('resultManometro');
+
+  if(!pOpEl.value || !rangoEl.value){
+    gaugeContainer.innerHTML='';
+    out.innerHTML='';
+    return;
+  }
+
+  const uOp = document.getElementById('unidadPOpManometro').value;
+  const uRango = document.getElementById('unidadRangoManometro').value;
+  const pOp = parseFloat(pOpEl.value) * CONV_P[uOp];
+  const rango = parseFloat(rangoEl.value) * CONV_P[uRango];
+
+  if(pOp<=0 || rango<=0){ gaugeContainer.innerHTML=''; out.innerHTML=''; return; }
+
+  const f = pOp / rango;
+  const ratio = rango / pOp;
+
+  gaugeContainer.innerHTML = renderGauge(f, rango);
+
+  let detalle = `<div class="result-detail">Presión de operación: ${pOp.toFixed(2)} kg/cm² · Rango: ${rango.toFixed(2)} kg/cm² · Rango / Operación: ${ratio.toFixed(2)}×</div>`;
+
+  let veredicto;
+  if(f > 1){
+    veredicto = `<div class="implicacion check-bad">❌ <strong>No correcto.</strong> La presión de operación excede el rango del manómetro. El instrumento no es adecuado para este equipo (NOM-020-STPS-2011, Numeral 12.2.1).</div>`;
+  } else if(f >= 0.25 && f <= (2/3)){
+    veredicto = `<div class="implicacion check-ok">✅ <strong>Correcto.</strong> El rango equivale a ${ratio.toFixed(2)} veces la presión de operación, dentro del intervalo de 1.5 a 4 veces que exige NOM-020-STPS-2011, Numeral 12.2.1.</div>`;
+  } else if(f < 0.25){
+    veredicto = `<div class="implicacion check-bad">❌ <strong>No correcto.</strong> El rango (${ratio.toFixed(2)}× la presión de operación) es demasiado amplio — debe ser de 1.5 a 4 veces (NOM-020-STPS-2011, Numeral 12.2.1). Se requiere un manómetro de menor escala.</div>`;
+  } else {
+    veredicto = `<div class="implicacion check-bad">❌ <strong>No correcto.</strong> El rango (${ratio.toFixed(2)}× la presión de operación) es insuficiente — debe ser de 1.5 a 4 veces (NOM-020-STPS-2011, Numeral 12.2.1). Se requiere un manómetro de mayor escala.</div>`;
+  }
+
+  out.innerHTML = detalle + veredicto;
+}
+
+function renderGauge(f, rango){
+  const fc = Math.min(Math.max(f,0),1);
+  const theta = Math.PI * (1-fc);
+  const nx = (100 + 65*Math.cos(theta)).toFixed(2);
+  const ny = (100 - 65*Math.sin(theta)).toFixed(2);
+  return `
+  <svg width="240" height="135" viewBox="0 0 200 115" style="max-width:100%;">
+    <path d="M20,100 A80,80 0 0 1 43.43,43.43" fill="none" stroke="#6B6B6B" stroke-width="14" opacity="0.3"/>
+    <path d="M43.43,43.43 A80,80 0 0 1 140,30.72" fill="none" stroke="#007836" stroke-width="14" opacity="0.35"/>
+    <path d="M140,30.72 A80,80 0 0 1 180,100" fill="none" stroke="#6B6B6B" stroke-width="14" opacity="0.3"/>
+    <line x1="100" y1="100" x2="${nx}" y2="${ny}" stroke="#005600" stroke-width="3"/>
+    <circle cx="100" cy="100" r="5" fill="#005600"/>
+    <text x="12" y="112" font-size="9" fill="#6B6B6B">0</text>
+    <text x="166" y="112" font-size="9" fill="#6B6B6B">${rango.toFixed(1)}</text>
+    <text x="88" y="10" font-size="9" fill="#6B6B6B">${(rango/2).toFixed(1)}</text>
+  </svg>`;
+}
+</script>
+</body>
+</html>
